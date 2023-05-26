@@ -1,10 +1,11 @@
-import { emitTextEditor, selectDocument } from "./socket-frontend-document.js";
+import { emitDeleteDocument, emitTextEditor, selectDocument } from "./socket-frontend-document.js";
 
 const parameters = new URLSearchParams(window.location.search);
 const documentName = parameters.get("name");
 
 const textEditor = document.getElementById("text-editor");
 const documentTitle = document.getElementById("title-document");
+const deleteButton = document.getElementById("delete-document");
 
 documentTitle.textContent = documentName || "Untitled";
 
@@ -20,4 +21,15 @@ function updateTextEditor(text){
     textEditor.value = text;
 }
 
-export { updateTextEditor };
+deleteButton.addEventListener("click", () => {
+    emitDeleteDocument(documentName);
+})
+
+function alertAndRedirect(name){
+    if(name ===  documentName){
+        alert(`Document ${name} deleted!`);
+        window.location.href = "/";
+    }
+}
+
+export { updateTextEditor, alertAndRedirect};
